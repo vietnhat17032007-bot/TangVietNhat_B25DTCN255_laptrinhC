@@ -28,7 +28,8 @@ void readLine(char *str, int size) {
         str[len - 1] = '\0';
 }
 int isValidRoomId(const char *id) {
-    return !(strlen(id) == 0 || strlen(id) > 4);
+    int len = strlen(id);
+    return (len >= 3 && len <= 4);
 }
 int findRoom(const char *id) {
     for (int i = 0; i < roomsCount; i++) {
@@ -43,7 +44,7 @@ void addRoom() {
         return;
     }
     char id[10], temp[20];
-    printf("Nhap roomId(toi da 4 ky tu): ");
+    printf("Nhap roomId(tu 3 den 4 ky tu): ");
     readLine(id, sizeof(id));
     if (!isValidRoomId(id)) {
         printf("roomId khong hop le!\n");
@@ -186,15 +187,12 @@ void displayRoomsWithPaging() {
     if (roomsCount == 0) {
         printf("Danh sach phong rong!\n");
         return;
-}
+    }
     int pageSize = 5;
-    int maxPage = 10;
     int totalPages = (roomsCount + pageSize - 1) / pageSize;
-
-    if (totalPages > maxPage)
-        totalPages = maxPage;
     int currentPage = 0;
     char choice;
+
     do {
         system("cls");
         printf("\n========== DANH SACH PHONG ==========\n");
@@ -226,20 +224,24 @@ void displayRoomsWithPaging() {
                    typeStr,
                    rooms[i].price,
                    statusStr);
+
             printf("+------+--------+----------+------------+------------+\n");
         }
         printf("\n1: Trang sau | 2: Trang truoc | 0: Thoat\n");
         printf("Chon: ");
-        scanf(" %c", &choice);
-        if (choice == '1' || choice == 'n') {
+
+        char temp2[10];
+        readLine(temp2, sizeof(temp2));
+        choice = temp2[0];
+        if (choice == '1') {
             if (currentPage < totalPages - 1)
                 currentPage++;
         }
-        else if (choice == '2' || choice == 'p') {
+        else if (choice == '2') {
             if (currentPage > 0)
                 currentPage--;
         }
-    } while (choice != '0' && choice != 'q');
+    } while (choice != '0');
 }
 void searchRoomByType() {
     char temp[10];
